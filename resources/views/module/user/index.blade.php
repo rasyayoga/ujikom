@@ -14,6 +14,18 @@
                     </a>
                 </div>
                 <div class="table-responsive">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach($errors->all() as $item)
+                        <li>{{ $item }}</li>
+                        @endforeach
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -32,8 +44,15 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->role }}</td>
                                 <td>
-                                    <button class="btn btn-warning">Edit</button>
-                                    <button class="btn btn-danger" onclick="confirm('Yakin ingin menghapus User ini?')">Hapus</button>
+                                    <a href="{{ route('user.edit', $user->id) }}">
+                                        <button class="btn btn-warning">Edit</button>
+                                    </a>
+                        
+                                    <form action="{{ route('user.delete', $user->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

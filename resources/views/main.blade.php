@@ -25,7 +25,7 @@
                 <div class="row align-items-center">
                     <div class="col-6">
                         <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb mb-0 d-flex align-items-center">
+                            {{-- <ol class="breadcrumb mb-0 d-flex align-items-center">
                               <li class="breadcrumb-item"><a href="#" class="link"><i class="mdi mdi-home-outline fs-4"></i></a></li>
                               <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-text">
                                 @if(Route::currentRouteName() == 'dashboard')
@@ -40,7 +40,7 @@
                                     Halaman Tidak Diketahui
                                 @endif
                               </li>
-                            </ol>
+                            </ol> --}}
                           </nav>
                           <h1 class="mb-0 fw-bold" id="page-title"></h1>
                     </div>

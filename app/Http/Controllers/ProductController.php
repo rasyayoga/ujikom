@@ -37,18 +37,35 @@ class ProductController extends Controller
             'image' => 'nullable|max:8000'
         ]);
 
-        // $imagePath = $request->file('image')->store('products', 'public');
+        $imagePath = $request->file('image')->store('products', 'public');
 
         Product::create([
             'name' => $request->name,
             'price' => $request->price,
             'stock' => $request->stock,
-            'image' => 'random'
+            'image' => $imagePath
         ]);
 
         return redirect()->route('product')->with('success', 'berhasil menambahkan data');
     }
 
+    public function updatestock(Request $request, $id)
+    {
+        $request->validate([
+            'stock' => 'required'
+        ]);
+
+        $product = Product::find($id);
+
+        if(!$product) {
+            return redirect()->back();
+        }
+        $product->update([
+            'stock' => $request->stock
+        ]);
+
+        return redirect()->back();
+    }
     /**
      * Display the specified resource.
      */
@@ -100,8 +117,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product, $id)
     {
-        $users = Product::findOrFail($id);
-        $users->delete();
+        $product = Product::findOrFail($id);
+        $product->delete();
         return redirect()->route('product')->with('success', 'berhasil hapus product');
     }
 }
