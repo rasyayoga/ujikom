@@ -9,6 +9,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="card-title mb-0">Daftar Produk</h4>
+                    <a href="{{ route('product.create') }}">
+                        <button class="btn btn-primary m-4">Tambah data</button>
+                    </a>
                 </div>
                 <div class="table-responsive">
                     @if ($errors->any())
@@ -36,22 +39,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($products as $index => $product)
                             <tr>
-                                <td>1</td>
-                                <td><img src="https://dubaitickets.tours/wp-content/uploads/2023/03/img-worlds-of-adventure-dubai-ticket-9-1.jpg" alt="Product Image" width="100"></td>
-                                <td>Nama Produk</td>
-                                <td>Rp 10.000</td>
-                                <td>100</td>
+                                <td>{{ $index +1  }}</td>
+                                <td><img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" width="100"></td>
+                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->price }}</td>
+                                <td>{{ $product->stock }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-warning">Edit</a>
+                                    <a href="{{ route('product.edit', $product->id) }}" class="btn btn-warning">Edit</a>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStockModal">
                                         Update Stock
                                     </button>
-                                    <form action="#" method="#POST" class="d-inline">
+                                    <form action="{{ route('product.delete', $product->id) }}" method="#POST" class="d-inline">
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</button>
                                     </form>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     <div class="d-flex justify-content-center mt-3">

@@ -17,7 +17,7 @@
         });
     </script>
 @endif
-    <form action="#" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('user.post') }}" method="POST" enctype="multipart/form-data">
         @csrf
       
         <!-- Nama -->

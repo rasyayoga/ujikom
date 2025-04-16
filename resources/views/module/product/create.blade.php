@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="row">
-    <form action="#" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('product.store.post') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @error('image')
         <div class="alert alert-danger">
@@ -36,7 +36,7 @@
         <!-- Gambar Produk -->
         <div class="mb-3">
           <label for="image" class="form-label">Gambar Produk</label>
-          <input type="file" class="form-control border-secondary" id="image" name="image" accept="image/*" required>
+          <input type="file" class="form-control border-secondary" id="image" name="image" accept="image/*">
           <img id="preview" style="margin-top: 10px; max-width: 100px; display: none;" />
         </div>
       
