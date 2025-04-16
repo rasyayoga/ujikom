@@ -51,7 +51,9 @@
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStockModal">
                                         Update Stock
                                     </button>
-                                    <form action="{{ route('product.delete', $product->id) }}" method="#POST" class="d-inline">
+                                    <form action="{{ route('product.delete', $product->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</button>
                                     </form>
                                 </td>

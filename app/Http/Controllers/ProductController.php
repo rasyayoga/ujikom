@@ -30,8 +30,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
-        dd($request->all());
         $request->validate([
             'name' => 'required',
             'price' => 'required',
@@ -104,6 +102,6 @@ class ProductController extends Controller
     {
         $users = Product::findOrFail($id);
         $users->delete();
-        return redirect()->back();
+        return redirect()->route('product')->with('success', 'berhasil hapus product');
     }
 }
