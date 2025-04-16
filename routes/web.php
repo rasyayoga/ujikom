@@ -16,7 +16,6 @@ Route::middleware(['guest'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-
     Route::get('/dashboard', [DetailSaleController::class, 'index'])->name('dashboard');
     Route::get('/product', [ProductController::class, 'index'])->name('product');
     Route::delete('/logout', [UserController::class, 'logout'])->name('logout');
