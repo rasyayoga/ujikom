@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\SaleExport;
 use App\Models\Customer;
 use App\Models\Detail_sale;
+use App\Models\Product;
 use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,8 +24,8 @@ class DetailSaleController extends Controller
      */
     public function index()
     {
-        $currentDate = Carbon::now()->toDateString();
-        $todaySalesCount = Detail_sale::whereDate('created_at', $currentDate)->count();
+
+        $todaySalesCount = Sale::whereDate('created_at', today())->count();
         $sales = Detail_sale::selectRaw('DATE(created_at) AS date, COUNT(*) AS total')
             ->groupByRaw('DATE(created_at)')
             ->orderByRaw('DATE(created_at)')
@@ -41,7 +42,16 @@ class DetailSaleController extends Controller
         $labelspieChart = $productShell->map(fn($item) => $item->product->name . ' : ' . $item->total_amount)->toArray();
         $salesDatapieChart = $productShell->map(fn($item) => $item->total_amount)->toArray();
         
-        return view('module.dashboard.index', compact('labels', 'salesData', 'detail_sales', 'todaySalesCount', 'productShell', 'labelspieChart', 'salesDatapieChart'));
+
+        //fungsi chard product
+        $products = Product::with('Detail_sale')->get();
+        $labelsProduct = $products->pluck('name')->toArray();
+        $salesDataProduct = $products->pluck('stock')->toArray();
+
+        //member dan nonmember
+        $nonmember = Sale::where('customer_id', null)->count();
+        $member = Sale::where('customer_id', '!=' , null)->count();
+        return view('module.dashboard.index', compact('member', 'nonmember' ,'salesDataProduct', 'labelsProduct', 'labels', 'salesData', 'detail_sales', 'todaySalesCount', 'productShell', 'labelspieChart', 'salesDatapieChart'));
         
     }
 
@@ -82,16 +92,17 @@ class DetailSaleController extends Controller
         $sale = Sale::with('Detail_sale.Product')->findOrFail($id);
         if($request->check_poin){
             $customer = Customer::where('id', $request->customer_id)->first();
+            $pointOld = $customer->point - $request->point;
             $sale->update([
-                'total_point' => $customer->point,
-                'total_pay' => $sale->total_pay - $customer->point,
-                'total_return' => $sale->total_return + $customer->point,
-                'total_discount' => $sale->total_price - $customer->point,
+                'total_point' => $customer->point - $sale->point,
+                'total_pay' => $sale->total_pay - $pointOld,
+                'total_return' => $sale->total_return + $pointOld,
+                'total_price' => $sale->total_price - $pointOld,
             ]);
 
             $customer->update([
                 'name' => $request->name ? $request->name : $customer->name,
-                'point' => 0
+                'point' =>  $request->point,
             ]);
         }
         if ($request->name) {
@@ -105,8 +116,9 @@ class DetailSaleController extends Controller
 
     public function exportexcel()
     {
-            return Facade::download(new SaleExport, 'Penjualan.xlsx');
-        
+            if(Auth::user()){
+                return Facade::download(new SaleExport, 'Penjualan.xlsx');
+            }
     }
 
     /**

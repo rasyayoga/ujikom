@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->date('sale_date');
+            $table->dateTime('sale_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->bigInteger('total_price');
             $table->bigInteger('total_pay');
             $table->bigInteger('total_return')->nullable();

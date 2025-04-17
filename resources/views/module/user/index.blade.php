@@ -7,10 +7,13 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
+                <h4 class="card-title mb-4">Daftar List</h4>
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">Daftar List</h4>
+                    <a href="{{ route('user.export') }}">
+                        <button type="button" class="btn btn-success mb-2">Export</button>
+                    </a>
                     <a href="{{ route('user.create') }}">
-                        <button type="button" class="btn btn-info mb-4">Tambah User</button>
+                        <button type="button" class="btn btn-info mb-2">Tambah User</button>
                     </a>
                 </div>
                 <div class="table-responsive">

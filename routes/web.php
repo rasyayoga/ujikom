@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DetailSaleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
-use App\Http\Controllers\User;
 use App\Http\Controllers\UserController;
+
 
 
 Route::middleware(['guest'])->group(function () {
@@ -18,10 +18,12 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DetailSaleController::class, 'index'])->name('dashboard');
     Route::get('/product', [ProductController::class, 'index'])->name('product');
-    Route::delete('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/sale', [SaleController::class, 'index'])->name('sale');
     Route::get('/downloadPDF/{id}', [DetailSaleController::class, 'downloadPDF'])->name('downloadPDF');
     Route::get('saleXLXS', [DetailSaleController::class, 'exportexcel'])->name('exportpenjualan');
+    Route::get('product-export-xlxs', [ProductController::class, 'exportProduct'])->name('product.export');
+
 });
 
         
@@ -38,11 +40,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
     Route::prefix('/user')->name('user.')->group(function() {
         Route::get('/', [UserController::class, 'index'])->name('list');
-        Route::get('/user/create', [UserController::class, 'create'])->name('create');
-        Route::post('/user/create/post', [UserController::class, 'store'])->name('post');
-        Route::get('/user/update/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::put('/user/update/post/{id}', [UserController::class, 'update'])->name('update');
-        Route::delete('/user/delete/post/{id}', [UserController::class, 'destroy'])->name('delete');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/create/post', [UserController::class, 'store'])->name('post');
+        Route::get('/update/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::put('/update/post/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/delete/post/{id}', [UserController::class, 'destroy'])->name('delete');
+        Route::get('-export-xlxs', [UserController::class, 'exportProduct'])->name('export');
     });
 
 });

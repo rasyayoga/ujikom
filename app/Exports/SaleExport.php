@@ -18,9 +18,10 @@ class SaleExport implements FromView, WithHeadings, WithMapping
     public function view(): View
     {
         return view('module.export.index', [
-            'invoices' => Sale::all()
+            'invoices' => Sale::orderBy('created_at', 'desc')->get()
         ]);
     }
+    
     
     public function headings(): array
     {
@@ -49,7 +50,7 @@ class SaleExport implements FromView, WithHeadings, WithMapping
                     : 'Produk tidak tersedia';
             })->implode(', '), 
             $item->detail_sales->sum('subtotal'), 
-            $item->total_pay,
+            $item->total_pay + $item->total_point,
             $item->total_price - optional($item->customer)->point ?? 0,
             $item->total_return,
             $item->created_at,

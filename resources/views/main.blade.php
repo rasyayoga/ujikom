@@ -25,22 +25,38 @@
                 <div class="row align-items-center">
                     <div class="col-6">
                         <nav aria-label="breadcrumb">
-                            {{-- <ol class="breadcrumb mb-0 d-flex align-items-center">
-                              <li class="breadcrumb-item"><a href="#" class="link"><i class="mdi mdi-home-outline fs-4"></i></a></li>
+                            <ol class="breadcrumb mb-0 d-flex align-items-center">
+                              <li class="breadcrumb-item"><a href="{{ route('dashboard') }}" class="link"><i class="mdi mdi-home-outline fs-4"></i></a></li>
                               <li class="breadcrumb-item active" aria-current="page" id="breadcrumb-text">
                                 @if(Route::currentRouteName() == 'dashboard')
                                     Dashboard
                                 @elseif(Route::currentRouteName() == 'product')
                                     Product
-                                @elseif(Route::currentRouteName() == 'user')
+                                @elseif(Route::currentRouteName() == 'product.create')
+                                    Create Product
+                                @elseif(Route::currentRouteName() == 'product.edit')
+                                    Update Product
+                                @elseif(Route::currentRouteName() == 'user.list')
                                      User
-                                @elseif(Route::currentRouteName() == 'sales')
-                                     sales
+                                @elseif(Route::currentRouteName() == 'user.create')
+                                     User Create
+                                @elseif(Route::currentRouteName() == 'user.edit')
+                                     User Edit 
+                                @elseif(Route::currentRouteName() == 'sale')
+                                     Sale
+                                @elseif(Route::currentRouteName() == 'sale.create')
+                                     Buat Penjualan
+                                @elseif(Route::currentRouteName() == 'sale.post')
+                                     Buat Penjualan / Detail Harga
+                                @elseif(Route::currentRouteName() == 'sales.print.show')
+                                     Print Invoice
+                                @elseif(Route::currentRouteName() == 'viewmembersale')
+                                     View Member
                                 @else
                                     Halaman Tidak Diketahui
                                 @endif
                               </li>
-                            </ol> --}}
+                            </ol>
                           </nav>
                           <h1 class="mb-0 fw-bold" id="page-title"></h1>
                     </div>

@@ -64,14 +64,8 @@
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i>
                                     {{ Auth::user()->name }}</a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    
-                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                       <i class="ti-user m-r-5 m-l-5">logout</i>
-                                    </a>
+                                <a class="dropdown-item" href="{{ route('logout') }}"><i class="ti-user m-r-5 m-l-5"></i>
+                                        Logout</a>
                             </ul>
      
                         </li>

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductExport;
+use App\Models\Detail_sale;
 use App\Models\Product;
 use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel as Facade;
 
 class ProductController extends Controller
 {
@@ -13,7 +17,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $max_data = 10;
+        $query = Product::with('Detail_sale')->orderBy('id','asc');
+
+        $products = $query->paginate($max_data)->withQueryString();
+
         return view('module.product.index', compact('products'));
     }
 
@@ -34,7 +42,9 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'required',
             'stock' => 'required',
-            'image' => 'nullable|max:8000'
+            'image' => 'nullable|max:8000|image'
+        ],[
+            'image.max' => 'silahkan pilih foto yang ukuranya lebih kecil'
         ]);
 
         $imagePath = $request->file('image')->store('products', 'public');
@@ -74,6 +84,13 @@ class ProductController extends Controller
         //
     }
 
+    public function exportProduct()
+    {
+            if(Auth::user()){
+                return Facade::download(new ProductExport, 'Prodouct.xlsx');
+            }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -94,7 +111,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required',
-            'image' => 'nullable',
+            'image' => 'nullable|image|max:8192' 
         ]);
 
         $product = Product::findOrFail($id);
@@ -115,10 +132,17 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product, $id)
+    public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
-        return redirect()->route('product')->with('success', 'berhasil hapus product');
+        $isProductUsed = Detail_sale::where('product_id', $id)->exists();
+    
+        if ($isProductUsed) {
+            return redirect()->route('product')->with('error', 'Produk tidak bisa dihapus karena sudah masuk transaksi.');
+        }
+    
+        Product::where('id', $id)->delete();
+        
+        return redirect()->route('product')->with('success', 'Berhasil menghapus produk.');
     }
+    
 }

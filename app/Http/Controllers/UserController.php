@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Exports\UserExport;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Facade;
+use Maatwebsite\Excel\Facades\Excel as Facade;
 
 
 class UserController extends Controller
@@ -120,6 +120,15 @@ class UserController extends Controller
         return redirect()->route('user.list')->with('success', 'Berhasil update user');
     }
     
+
+    public function exportProduct()
+    {
+            if(Auth::user()->role = 'admin'){
+                return Facade::download(new UserExport, 'DataUser.xlsx');
+            }
+    }
+
+
     public function destroy($id)    {
         $user = User::findOrFail($id);
         $user->delete();

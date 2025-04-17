@@ -77,7 +77,6 @@ class SaleController extends Controller
         ],[
             'total_pay.required' => 'masukan jumlah yang akan dibayar'
         ]);
-
         $newPrice = (int) preg_replace('/\D/', '', $request->total_price);
         $newPay = (int) preg_replace('/\D/', '', $request->total_pay);
         $newreturn = $newPay - $newPrice;
@@ -141,7 +140,7 @@ class SaleController extends Controller
                 ->with('message', 'Silahkan daftar sebagai member');
         }else {
             $sale = Sale::create([
-                'sale_date' => Carbon::now()->format('Y-m-d'),
+                'sale_date' => Carbon::now(),
                 'total_price' => $newPrice,
                 'total_pay' => $newPay,
                 'total_return' => $newreturn,

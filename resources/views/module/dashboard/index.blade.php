@@ -55,7 +55,26 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-md-flex align-items-center">
+                                    <div>
+                                    </div>
+                                </div>
+                                <canvas id="productbard"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                                
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Total Customer</h4>
+                                <canvas id="memberNonMemberPie"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 @endif
             </div>
             
@@ -101,9 +120,56 @@
                         }
                     });
                 });
+            </script>      
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var ctx = document.getElementById('memberNonMemberPie')?.getContext('2d');
+                    if (!ctx) {
+                        console.error("Canvas dengan id 'memberNonMemberPie' tidak ditemukan!");
+                        return;
+                    }
+            
+                    var member = {{ $member }};
+                    var nonmember = {{ $nonmember }};
+            
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Member', 'Nonmember'],
+                            datasets: [{
+                                data: [member, nonmember],
+                                backgroundColor: [
+                                    'rgba(100, 197, 197, 0.7)', 
+                                    'rgba(85, 186, 132, 0.7)'    
+                                ],
+                                borderColor: [
+                                    'rgba(100, 197, 197, 1)',
+                                    'rgba(85, 186, 132, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            return tooltipItem.label + ': ' + tooltipItem.raw.toLocaleString();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
             </script>
-            
-            
+
+
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
                     var chart = document.getElementById('salesChart')?.getContext('2d');
@@ -137,11 +203,43 @@
                             }
                         }
                     });
-                });
-            
-            
-                
+                });    
   </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var chart = document.getElementById('productbard')?.getContext('2d');
+        if (!chart) {
+            console.error("Canvas dengan id 'productbard' tidak ditemukan!");
+            return;
+        }
+
+        var labelsProduct = @json($labelsProduct); 
+        var salesDataProduct = @json($salesDataProduct);
+
+        var productbard = new Chart(chart, {
+            type: 'bar',
+            data: {
+                labels: labelsProduct,
+                datasets: [{
+                    label: 'Jumlah Product',
+                    data: salesDataProduct,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });    
+</script>
   
   @endsection
         

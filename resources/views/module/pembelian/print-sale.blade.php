@@ -86,7 +86,7 @@
                                                     MEMBER SEJAK :
                                                     {{ \Carbon\Carbon::parse($sale['Customer']['created_at'])->format('d F Y') }}
                                                     <br>
-                                                    MEMBER POIN : {{ $sale['Customer'] ? $sale['Customer']['point'] : '0' }}
+                                                    MEMBER POIN : {{ $sale->point ? $sale->point : '0' }}
                                                 </address>
                                             </div>
                                         @endif
@@ -155,7 +155,7 @@
                                         </div>
                                         <div class="sub-price">
                                             <small>KASIR</small>
-                                            {{-- <span class="text-inverse">{{ Auth::user()->name }}</span> --}}
+                                            <span class="text-inverse">{{ Auth::user()->name }}</span>
                                         </div>
                                             <div class="sub-price">
                                                 <small>KEMBALIAN</small>

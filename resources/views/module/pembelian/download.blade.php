@@ -93,14 +93,16 @@
             <div class="info" style="display: flex; justify-content: space-between;">
                 <div>
                     <small>
-                        Member Status : Member<br>
-                        No. HP : 081234567890<br>
+                        Member Status : {{ $sale['Customer'] ? 'Member' : 'Bukan Member' }}</br>
+                        No. HP : {{ $sale['Customer'] ? $sale['Customer']['no_hp'] : '-' }}</br>
                     </small>
                 </div>
                 <div>
                     <small>
-                        Bergabung Sejak : 10 Januari 2024<br>
-                        Poin Member : 120
+                        Bergabung Sejak :
+                        {{ $sale['Customer'] ? \Carbon\Carbon::parse($sale['Customer']['created_at'])->format('d F Y') : '-' }}
+                        <br>
+                        Poin Member : {{ $sale->point ? $sale->point : '-' }}
                     </small>
                 </div>
             </div>
@@ -121,34 +123,23 @@
                                 <h2>Sub Total</h2>
                             </td>
                         </tr>
-                        <tr class="service">
-                            <td class="tableitem">
-                                <p class="itemtext">Kaos Polos</p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext">2</p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext">Rp. 50.000</p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext">Rp. 100.000</p>
-                            </td>
-                        </tr>
-                        <tr class="service">
-                            <td class="tableitem">
-                                <p class="itemtext">Celana Jeans</p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext">1</p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext">Rp. 150.000</p>
-                            </td>
-                            <td class="tableitem">
-                                <p class="itemtext">Rp. 150.000</p>
-                            </td>
-                        </tr>
+                        @foreach ($sale['Detail_sale'] as $item)
+                            <tr class="service">
+                                <td class="tableitem">
+                                    <p class="itemtext">{{ $item['Product']['name'] }}</p>
+                                </td>
+                                <td class="tableitem">
+                                    <p class="itemtext">{{ $item['amount'] }}</p>
+                                </td>
+                                <td class="tableitem">
+                                    <p class="itemtext">Rp.
+                                        {{ number_format($item['Product']['price'], '0', ',', '.') }}</p>
+                                </td>
+                                <td class="tableitem">
+                                    <p class="itemtext">Rp. {{ number_format($item['subtotal'], '0', ',', '.') }}</p>
+                                </td>
+                            </tr>
+                        @endforeach
                         <tr class="tabletitle">
                             <td></td>
                             <td></td>
@@ -156,17 +147,17 @@
                                 <h2>Total Harga</h2>
                             </td>
                             <td>
-                                <h2>Rp. 250.000</h2>
+                                <h2>Rp. {{ number_format($sale['total_price'], '0', ',', '.') }}</h2>
                             </td>
                         </tr>
                         <tr class="tabletitle">
                             <td>Poin Digunakan</td>
-                            <td>20</td>
+                            <td>{{ $sale['total_point'] }}</td>
                             <td>
                                 <h2>Harga Setelah Poin</h2>
                             </td>
                             <td>
-                                <h2>Rp. 230.000</h2>
+                                <h2>Rp. {{ number_format($sale['total_point'], '0', ',', '.') }}</h2>
                             </td>
                         </tr>
                         <tr class="tabletitle">
@@ -176,14 +167,14 @@
                                 <h2>Total Kembalian</h2>
                             </td>
                             <td>
-                                <h2>Rp. 20.000</h2>
+                                <h2>Rp. {{ number_format($sale['total_return'], '0', ',', '.') }}</h2>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div id="legalcopy">
                     <center>
-                        <p>2025-04-15 14:32 | Admin Toko</p>
+                        <p>{{ $sale['sale_date'] }} | {{ $sale['user']['name'] }}</p>
                         <p class="legal"><strong>Terima kasih atas pembelian Anda!</strong></p>
                     </center>
                 </div>

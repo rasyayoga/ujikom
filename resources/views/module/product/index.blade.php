@@ -7,8 +7,11 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
+                <h4 class="card-title mb-0">Daftar Produk</h4>
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="card-title mb-0">Daftar Produk</h4>
+                    <a href="{{ route('product.export') }}">
+                        <button class="btn btn-success m-4">Export</button>
+                    </a>
                     @if(Auth::user()->role === 'admin')                                            
                     <a href="{{ route('product.create') }}">
                         <button class="btn btn-primary m-4">Tambah data</button>
@@ -18,16 +21,29 @@
                 </div>
                 <div class="table-responsive">
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach($errors->all() as $item)
-                        <li>{{ $item }}</li>
-                        @endforeach
-                    </div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                html: `{!! implode('<br>', $errors->all()) !!}`,
+                                confirmButtonColor: "#d33",
+                                confirmButtonText: "Tutup"
+                            });
+                        });
+                    </script>
                 @endif
                 @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "{!! session('success') !!}",
+                            icon: "success",
+                            confirmButtonText: "OK"
+                        });
+                    });
+                </script>
                 @endif
 
                     <table class="table table-bordered">
@@ -92,8 +108,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-center mt-3">
-                        <!-- Pagination placeholder -->
+                    <div class="d-flex justify-content-center">
+                        {{ $products->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
             </div>

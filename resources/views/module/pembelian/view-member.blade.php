@@ -8,13 +8,13 @@
                 <div class="card">
                     <div class="card-body">
                         <form action="{{ route('sales.print.show', ['id' => $sale['id']]) }}" method="GET">
-                        <form action="#" method="GET">
                             @csrf
                             @if (Session::get('error'))
                                 <div class="alert alert-danger">
                                     {{ Session::get('error') }}
                                 </div>
                             @endif
+                            <input type="nummber" hidden value="{{$sale->point}}" name="point">
                             <div class="row">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="table table-bordered">
@@ -82,13 +82,25 @@
                                         <input type="hidden" name="customer_id" value="{{ $sale['customer_id'] }}">
                                         <div class="form-group">
                                             <label for="name" class="form-label">Nama Member (identitas)</label>
-                                            <input type="text" name="name" id="name" class="form-control"
-                                                required value="{{ $sale['customer']['name'] }}" maxlength="50">
+                                            <input 
+                                                type="text" 
+                                                name="name" 
+                                                id="name" 
+                                                class="form-control"
+                                                value="{{ $sale['customer']['name'] ?? '' }}"
+                                                maxlength="50"
+                                                @if (!empty($sale['customer']['name']))
+                                                    readonly
+                                                @else
+                                                    required
+                                                @endif
+                                            >
                                         </div>
+                                        
                                         <div class="form-group">
                                             <label for="poin" class="form-label">Poin</label>
                                             <input type="text" name="point" id="poin"
-                                                value="{{ $sale['customer']['point'] }}" disabled class="form-control">
+                                                value="{{ $sale['customer']['point'] - $sale->point }}" disabled class="form-control">
                                         </div>
                                         <div class="form-check ms-4">
                                             <input class="form-check-input" type="checkbox" value="Ya" id="check2"
